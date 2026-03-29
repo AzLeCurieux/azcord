@@ -1,0 +1,23 @@
+# Copy this file to compose.override.yml and adjust as needed.
+# This file is gitignored to prevent accidental exposure of local config.
+
+services:
+  caddy:
+    ports: !override
+      - "8880:80"   # Use this if Stoat is behind another reverse proxy
+
+  web:
+    entrypoint: ["/custom-entrypoint.sh"]
+    command: ["npm", "start"]
+    volumes:
+      - ./custom-entrypoint.sh:/custom-entrypoint.sh
+      - ./custom-assets/favicon.ico:/app/dist/favicon.ico
+      - ./custom-assets/wordmark.svg:/app/dist/wordmark.svg
+
+  rabbit:
+    ports:
+      - "15672:15672"   # RabbitMQ management UI (optional)
+
+  minio:
+    ports:
+      - "9001:9001"   # MinIO console (optional)
